@@ -1,0 +1,15 @@
+page-add-mobility {
+  ion-slides {
+    height: 100%;
+  }
+  .swiper-slide {
+    overflow-y: scroll;
+    display: block;
+  }
+  .center {
+    position:relative;;
+    left : 50%;
+    transform: translateX(-50%);
+
+  }
+}

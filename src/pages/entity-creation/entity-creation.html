@@ -1,0 +1,60 @@
+<!--
+  Generated template for the EntityCreationPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>EntityCreation</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="exitPage()" icon-end>Exit
+        <ion-icon name="md-exit">
+        </ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+    <ion-list>
+      <ion-item>
+        <ion-label>Type</ion-label>
+        <ion-select name="type" id="type" ngModel required>
+          <ion-option value="Univ">University</ion-option>
+          <ion-option value="Company">Company</ion-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>Name</ion-label>
+        <ion-input type="text" placeholder="Entity name" name="name" id="name" ngModel required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Phone number</ion-label>
+        <ion-input type="tel" name="tel" id="tel" ngModel required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Email</ion-label>
+        <ion-input type="email" placeholder="entity@cyber.com" name="email" id="email" ngModel required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Commentary</ion-label>
+        <ion-input type="text" placeholder="Comment on the entity" name="comment" id="comment" ngModel required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label for="logo" stacked>Logo</ion-label>
+        <ion-input type="file" id="logo" name="logo" accept=".png, .jpg, .jpeg" ngModel></ion-input>
+      </ion-item>
+    </ion-list>
+    <ion-buttons class="center">
+      <button ion-button color="danger"round>Cancel</button>
+      <button ion-button  color="secondary" round [disabled]="f.invalid" type="submit">
+        Register
+      </button>
+    </ion-buttons>
+
+
+  </form>
+</ion-content>
