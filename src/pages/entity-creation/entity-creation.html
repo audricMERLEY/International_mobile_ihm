@@ -22,8 +22,8 @@
       <ion-item>
         <ion-label>Type</ion-label>
         <ion-select name="type" id="type" ngModel required>
-          <ion-option value="Univ">University</ion-option>
-          <ion-option value="Company">Company</ion-option>
+          <ion-option value="UNIVERSITY">UNIVERSITY</ion-option>
+          <ion-option value="COMPANY">COMPANY</ion-option>
         </ion-select>
       </ion-item>
 
@@ -40,21 +40,39 @@
         <ion-input type="email" placeholder="entity@cyber.com" name="email" id="email" ngModel required></ion-input>
       </ion-item>
       <ion-item>
+        <ion-label stacked>Employees Number</ion-label>
+        <ion-input type="number" min="1" placeholder="Number of employees" name="empNbr" id="empNbr" ngModel required></ion-input>
+      </ion-item>
+      <ion-item>
         <ion-label stacked>Commentary</ion-label>
         <ion-input type="text" placeholder="Comment on the entity" name="comment" id="comment" ngModel required></ion-input>
       </ion-item>
       <ion-item>
         <ion-label for="logo" stacked>Logo</ion-label>
-        <ion-input type="file" id="logo" name="logo" accept=".png, .jpg, .jpeg" ngModel></ion-input>
+        <ion-input type="file" id="logo" name="logo" accept=".png, .jpg, .jpeg" (change)="onSelectFile($event)" ngModel></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Country</ion-label>
+        <ion-input type="text" placeholder="Country of the entity" name="country" id="country" ngModel required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Town</ion-label>
+        <ion-input type="text" placeholder="Town of the entity" name="town" id="town" ngModel required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Latitude</ion-label>
+        <ion-input type="number" placeholder="Latitude" name="latitude" id="latitude" ngModel required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Longitude</ion-label>
+        <ion-input type="number" placeholder="Longitude" name="longitude" id="longitude" ngModel required></ion-input>
       </ion-item>
     </ion-list>
-    <ion-buttons class="center">
-      <button ion-button color="danger"round>Cancel</button>
+    <ion-buttons>
       <button ion-button  color="secondary" round [disabled]="f.invalid" type="submit">
         Register
       </button>
     </ion-buttons>
-
-
   </form>
+  <button ion-button color="danger" (click)="exitPage()" round>Cancel</button>
 </ion-content>

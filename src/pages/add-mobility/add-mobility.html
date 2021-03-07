@@ -12,32 +12,6 @@
 
 <ion-content padding>
   <ion-slides pager #slides>
-    <!-- Student slide-->
-    <form [formGroup]="mobilityForm" (ngSubmit)="onSubmitForm()">
-      <ion-slide>
-        <ion-chip>
-          <ion-icon name="md-contact"></ion-icon>
-          <ion-label>Student</ion-label>
-        </ion-chip>
-        <ion-list>
-          <ion-item class="form-group">
-            <ion-label stacked>Firstname</ion-label>
-            <ion-input type="text" id="first_name" class="form-control" formControlName="first_name"></ion-input>
-          </ion-item>
-          <ion-item class="form-group">
-            <ion-label stacked>Lastname</ion-label>
-            <ion-input type="text" id="last_name" class="form-control" formControlName="last_name"></ion-input>
-          </ion-item>
-
-          <ion-item class="form-group">
-            <ion-label stacked>Promo</ion-label>
-            <ion-select [(ngModel)]="promo" id="promo" class="form-control" formControlName="promo">
-              <ion-option *ngFor="let opt of promosTitle" [value]="opt">{{opt}}</ion-option>
-            </ion-select>
-          </ion-item>
-        </ion-list>
-      </ion-slide>
-    </form>
     <!-- Localisation slide-->
     <form [formGroup]="mobilityForm" (ngSubmit)="onSubmitForm()">
       <ion-slide>
@@ -54,7 +28,7 @@
                            animated></ion-searchbar>
             <ion-list>
               <ion-item *ngFor="let item of countries">
-                {{ item }}
+                {{ item.label }}
               </ion-item>
             </ion-list>
           </ion-row>
@@ -67,7 +41,7 @@
                            animated></ion-searchbar>
             <ion-list>
               <ion-item *ngFor="let item of towns">
-                {{ item }}
+                {{ item.label }}
               </ion-item>
             </ion-list>
           </ion-row>
@@ -76,21 +50,13 @@
             <div class="center">
               <ion-row>
                 <ion-label id="entityLabel">University/Company</ion-label>
-                <button ion-button icon-only color="dark" (click)="createEntity()" small>
-                  <ion-icon name="md-add-circle" ></ion-icon>
-                </button>
               </ion-row>
             </div>
             <ion-searchbar (ionInput)="getEntities($event)" type="text" placeholder="Company/University name"
                            id="entity" class="form-control" formControlName="entity" [disabled]="!isEnabled()"
                            animated></ion-searchbar>
             <ion-list>
-              <ion-item *ngFor="let item of entities">
-                <ion-thumbnail item-start>
-                  <img src={{item.logoPath}}>
-                </ion-thumbnail>
-                <h2>{{ item.name }}</h2>
-              </ion-item>
+              <entity-display *ngFor="let item of entities" [entity]="item"></entity-display>
             </ion-list>
           </ion-row>
 
@@ -106,6 +72,17 @@
           <ion-label>Duration</ion-label>
         </ion-chip>
         <ion-list>
+          <ion-item class="form-group">
+            <ion-label>Title</ion-label>
+            <ion-input type="text"  id="title" class="form-control"
+                          formControlName="title"></ion-input>
+          </ion-item>
+          <ion-item class="form-group">
+            <ion-label>Description</ion-label>
+            <ion-input type="text"  id="comment" class="form-control" placeholder="The description of the mobility"
+                       formControlName="comment"></ion-input>
+          </ion-item>
+
           <ion-item class="form-group">
             <ion-label>Start Date</ion-label>
             <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="mobilityStartDate" id="startDate" class="form-control"
@@ -123,6 +100,13 @@
       </ion-slide>
     </form>
   </ion-slides>
-
+  <ion-buttons>
+    <button ion-button color="dark" (click)="createEntity()" round>
+      Create Entity
+    </button>
+    <button (click)="exitPage()" color="danger" ion-button round>
+      Cancel
+    </button>
+  </ion-buttons>
 
 </ion-content>

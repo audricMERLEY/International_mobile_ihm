@@ -1,5 +1,12 @@
-import { Component } from '@angular/core';
-
+import {Component, Input, OnInit} from '@angular/core';
+import {Mobility} from "../../interface/mobility";
+import {PersonServiceProvider} from "../../providers/person-service/person-service";
+import {TownServiceProvider} from "../../providers/town-service/town-service";
+import {CountryServiceProvider} from "../../providers/country-service/country-service";
+import {Person} from "../../interface/person";
+import {Town} from "../../interface/town";
+import {Country} from "../../interface/country";
+import {MobilityServiceProvider} from "../../providers/mobility-service/mobility-service";
 /**
  * Generated class for the MobilityDisplayComponent component.
  *
@@ -10,13 +17,16 @@ import { Component } from '@angular/core';
   selector: 'mobility-display',
   templateUrl: 'mobility-display.html'
 })
-export class MobilityDisplayComponent {
+export class MobilityDisplayComponent{
 
-  text: string;
 
-  constructor() {
-    console.log('Hello MobilityDisplayComponent Component');
-    this.text = 'Hello World';
+  @Input()
+  mobility : Mobility;
+
+
+  constructor(){
+
   }
+
 
 }

@@ -1,4 +1,11 @@
-<!-- Generated template for the MobilityDisplayComponent component -->
-<div>
-  {{text}}
-</div>
+ <ion-card>
+    <img src="assets/imgs/defaultMob.png"/>
+      <ion-card-title>
+        {{mobility.title}}
+      </ion-card-title>
+      <ion-card-content>
+        <ion-label><b style="color:red">Start Date :</b> {{mobility.startDate | date: 'dd/MM/y' | uppercase}}</ion-label>
+        <ion-label><b style="color:red">End Date :</b> {{mobility.endDate | date: 'dd/MM/y' | uppercase}}</ion-label>
+        <ion-label>Comment : {{mobility.comment}}</ion-label>
+    </ion-card-content>
+  </ion-card>

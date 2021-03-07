@@ -1,8 +1,16 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {IonicPage, ModalController, NavController, NavParams, Slides} from 'ionic-angular';
+import {IonicPage, ModalController, NavController, NavParams, Slides, ViewController} from 'ionic-angular';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {EntityCreationPage} from "../entity-creation/entity-creation";
 import {Entity} from "../../interface/entity";
+import {CountryServiceProvider} from "../../providers/country-service/country-service";
+import {Country} from "../../interface/country";
+import {TownServiceProvider} from "../../providers/town-service/town-service";
+import {Town} from "../../interface/town";
+import {EntityServiceProvider} from "../../providers/entity-service/entity-service";
+import {Person} from "../../interface/person";
+import {Mobility} from "../../interface/mobility";
+import {MobilityServiceProvider} from "../../providers/mobility-service/mobility-service";
 //import {Location, Appearance, GermanAddress} from "@angular-material-extensions/google-maps-autocomplete";
 //import PlaceResult = google.maps.places.PlaceResult;
 
@@ -19,25 +27,26 @@ import {Entity} from "../../interface/entity";
   templateUrl: 'add-mobility.html',
 })
 export class AddMobilityPage implements OnInit{
-  promo: '';
   mobilityStartDate: any;
   mobilityEndDate: any;
-  promosTitle = [
-    "CITISE1", "CITISE2", "FISE1", "FISEA3"
-  ]
-  countries = [];
-  towns = [];
-  entities = [];
+  countries : Country[]= [];
+  towns :Town[]= [];
+  entities: Entity[] = [];
   mobilityForm: FormGroup;
+  person : Person;
 
   @ViewChild('slides', {read: Slides}) slides: Slides;
 
   onEnd() {
-    console.log(this.slides.isEnd());
     return this.slides.isEnd();
   }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,private formBuilder: FormBuilder,public modalCtrl : ModalController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,private formBuilder: FormBuilder,public modalCtrl : ModalController,
+              private countryService : CountryServiceProvider, private townService : TownServiceProvider, private entityService : EntityServiceProvider,
+              private mobilityService : MobilityServiceProvider) {
+    this.person = this.navParams.get('person');
+    if(this.person == null)
+      this.exitPage();
   }
 
   ngOnInit(){
@@ -45,9 +54,8 @@ export class AddMobilityPage implements OnInit{
   }
   initForm(){
     this.mobilityForm = this.formBuilder.group({
-      first_name : ['', Validators.required],
-      last_name : ['',Validators.required],
-      promo : ['',Validators.required],
+      title : ['',Validators.required],
+      comment : ['',Validators.required],
       country : ['',Validators.required],
       town: ['',Validators.required],
       entity: ['',Validators.required],
@@ -62,67 +70,72 @@ export class AddMobilityPage implements OnInit{
 
   onSubmitForm() {
     const formValue = this.mobilityForm.value;
-    console.log(formValue);
+    if(this.entities!= null && this.person != null && this.entities.length > 0){
+      let mobility = new Mobility(0,formValue['title'],formValue['startDate'],formValue['endDate'],formValue['comment'],this.person);
+      this.mobilityService.addMobility(mobility,this.entities[0].id,this.person.id).subscribe(
+        (mobility : Mobility)=>{
+          this.exitPage();
+        },error => console.log(error)
+      )
+    }
+
   }
 
-  private refreshCountries() {
-    this.countries = ["France", "USA", "Inde", "République Centre-Africaine", "A", "D", "C", "E", "g"];
+  private refreshCountries(name : string) {
+    if(name != null && name.trim().length > 0){
+      this.countryService.getCountriesByName(name).subscribe((countries: Country[]) => {
+        this.countries = countries;
+      }, (error) => console.log(error));
+    }else{
+      this.countryService.getAllCountries().subscribe((countries: Country[]) => {
+        this.countries = countries;
+      }, (error) => console.log(error));
+    }
+
   }
 
-  private refreshTowns(country: string) {
-    this.towns = ["Givry", "Chalon", "Macon", "Thionville", "Saint etienne", "Marseille", "Saint Marcellin"];
-  }
+  private refreshTowns(name : string, id:number) {
 
-  private refreshEntities(country : string, town : string){
-    //this.entities = ["Intech","Mutest","TSE"];
-    this.entities = [];
-    this.entities.push(new Entity(0,"Intech","0782451213","intech@mail.lu","Company",""));
-    this.entities.push(new Entity(0,"Mutest","0666666666","aem@mutest.fr","Company",""));
-    this.entities.push(new Entity(0,"TSE","0782451213","intech@mail.lu","University",""));
-  }
-
-  getCountries(ev: any) {
-    // Reset items back to all of the items
-    this.refreshCountries();
-
-    // set val to the value of the searchbar
-    const val = ev.target.value;
-
-    // if the value is an empty string don't filter the items
-    if (val && val.trim() != '') {
-      this.countries = this.countries.filter((item) => {
-        return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
-      })
+    if(name != null && name.trim().length > 0){
+      this.townService.getTownsByCountry(id).subscribe((towns : Town[])=>{
+        this.towns = towns.filter((t : Town)=>{return t.label.toLowerCase().includes(name.toLowerCase())});
+      },(error) => console.log(error));
+    }else{
+      this.townService.getTownsByCountry(id).subscribe((towns : Town[])=>{
+        this.towns = towns;
+      },(error) => console.log(error));
     }
   }
 
-  getTowns(ev: any) {
-    // Reset items back to all of the items
-    this.refreshTowns("France");
+  private refreshEntities(name : string,id : number){
+    if(name != null && name.trim().length > 0) {
+      this.entityService.getEntityByTown(id).subscribe((entities: Entity[]) => {
+        this.entities = entities.filter((e : Entity)=>e.title.toLowerCase().includes(name.toLowerCase()));
+      }, (error) => console.log(error));
+    }else {
+      this.entityService.getEntityByTown(id).subscribe((entities: Entity[]) => {
+        this.entities = entities;
+      }, (error) => console.log(error));
+    }
+  }
 
+  getCountries(ev: any) {
     // set val to the value of the searchbar
     const val = ev.target.value;
+    this.refreshCountries(val);
+  }
 
-    // if the value is an empty string don't filter the items
-    if (val && val.trim() != '') {
-      this.towns = this.towns.filter((item) => {
-        return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
-      })
+  getTowns(ev: any) {
+    if(this.countries.length == 1){
+      const val = ev.target.value;
+      this.refreshTowns(val,this.countries[0].id);
     }
   }
 
   getEntities(ev: any){
-    // Reset items back to all of the items
-    this.refreshEntities("France","Saint Etienne");
-
-    // set val to the value of the searchbar
-    const val = ev.target.value;
-
-    // if the value is an empty string don't filter the items
-    if (val && val.trim() != '') {
-      this.entities = this.entities.filter((item) => {
-        return (item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
-      })
+    if(this.towns.length == 1){
+      const val = ev.target.value;
+      this.refreshEntities(val,this.towns[0].id)
     }
   }
 
@@ -141,7 +154,11 @@ export class AddMobilityPage implements OnInit{
   }
 
   createEntity(){
-    let modal = this.modalCtrl.create(EntityCreationPage);
+    const modal = this.modalCtrl.create(EntityCreationPage);
     modal.present();
+  }
+
+  exitPage(){
+    this.navCtrl.pop();
   }
 }

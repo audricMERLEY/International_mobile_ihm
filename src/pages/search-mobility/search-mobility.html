@@ -11,5 +11,58 @@
 </ion-header>
 
 <ion-content padding>
+  <ion-row class="form-group">
+    <ion-label id="searchLabel">Search</ion-label>
+    <ion-searchbar (ionInput)="searchBarChange($event)" type="text" placeholder="Search bar"
+                   id="searchBar" class="form-control"
+                   animated></ion-searchbar>
+  </ion-row>
+  <ion-list>
+    <ion-item>
+      <ion-label><b>Choice</b></ion-label>
+      <ion-select name="type" id="type" (ionChange)="choiceChange($event)">
+        <ion-option value="Mobility">Mobility</ion-option>
+        <ion-option value="Entity">Entity</ion-option>
+        <ion-option value="Person">Person</ion-option>
+      </ion-select>
+    </ion-item>
 
+    <div *ngIf="isSelected('mobility')">
+      <ion-item-divider>Mobility filter</ion-item-divider>
+      <ion-list>
+        <ion-item *ngFor="let mobF of mobilityFilter">
+          <ion-label>{{mobF}}</ion-label>
+          <ion-checkbox value="mobF" (click)="checkBoxClick(mobF)"></ion-checkbox>
+        </ion-item>
+      </ion-list>
+    </div>
+    <div *ngIf="isSelected('entity')">
+      <ion-item-divider>Entity filter</ion-item-divider>
+      <ion-list>
+        <ion-item *ngFor="let entF of entityFilter">
+          <ion-label>{{entF}}</ion-label>
+          <ion-checkbox value="entF" (click)="checkBoxClick(entF)"></ion-checkbox>
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <div *ngIf="isSelected('person')">
+      <ion-item-divider>Person filter</ion-item-divider>
+      <ion-list>
+        <ion-item *ngFor="let persF of personFilter">
+          <ion-label>{{persF}}</ion-label>
+          <ion-checkbox value="persF" (click)="checkBoxClick(persF)"></ion-checkbox>
+        </ion-item>
+      </ion-list>
+    </div>
+  </ion-list>
+
+  <map-display></map-display>
+
+  <div id="results">
+    <ion-item-divider><b>Search results</b></ion-item-divider>
+      <mobility-display *ngFor="let mob of mobilitySearch" [mobility]="mob"></mobility-display>
+      <person-display *ngFor="let per of personSearch" [person]="per"></person-display>
+      <entity-display *ngFor="let en of entitySearch" [entity]="en"></entity-display>
+  </div>
 </ion-content>

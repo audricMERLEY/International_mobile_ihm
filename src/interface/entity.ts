@@ -1,19 +1,25 @@
+import {Mobility} from "./mobility";
+
 export class Entity{
   id:number;
-  name:string;
+  title:string;
   tel:string;
   email:string;
   type:string;
-  commentary:string;
-  logoPath:string;
-  constructor(id:number,name:string,tel:string,email:string,type:string,commentary:string,logoPath:string="assets\\imgs\\default.png") {
+  description:string;
+  employeesNbr : number;
+  logo:string;
+  latitude : number;
+  longitude:number;
+  constructor(id:number,name:string,tel:string,email:string,type:string,commentary:string,employeesNbr : number ,logoPath:string="assets\\imgs\\default.png") {
     this.id = id;
-    this.name=name;
+    this.title=name;
     this.tel= tel;
     this.email= email;
     this.type= type;
-    this.commentary= commentary;
-    this.logoPath= logoPath;
+    this.description= commentary;
+    this.logo = logoPath;
+    this.employeesNbr = employeesNbr;
   }
 
 }

@@ -1,0 +1,21 @@
+<ion-card>
+  <ion-fab right>
+    <button ion-fab mini><ion-icon name="add"></ion-icon></button>
+    <ion-fab-list>
+      <button (click)="modPerson()" color="secondary" ion-fab><ion-icon name="md-hammer"></ion-icon></button>
+      <button (click)="addPerson()" color="primary" ion-fab><ion-icon name="md-add-circle"></ion-icon></button>
+      <button (click)="addMobility()" color="danger" ion-fab><ion-icon name="md-paper-plane"></ion-icon></button>
+    </ion-fab-list>
+  </ion-fab>
+  <img src={{person.image}}/>
+  <ion-card-title>
+    {{person.firstName}} {{person.lastName | uppercase}}
+  </ion-card-title>
+  <ion-card-content>
+    <ion-label><b style="color:red">Email :</b> {{person.email}}</ion-label>
+    <ion-label><b style="color:red">Role :</b> {{person.role}}</ion-label>
+    <ion-label *ngIf="isStudent()"><b style="color:red">Promo :</b> {{person.promo | uppercase}} - {{person.parcours | uppercase}}</ion-label>
+    <ion-label *ngIf="person.mobilities != null"><b style="color:red">Mobilities :</b> {{person.mobilities.length}}</ion-label>
+  </ion-card-content>
+</ion-card>
+

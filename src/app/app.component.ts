@@ -5,6 +5,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { TabsPage } from '../pages/tabs/tabs';
 
+declare global {
+  type unknown = any
+}
 @Component({
   templateUrl: 'app.html'
 })
